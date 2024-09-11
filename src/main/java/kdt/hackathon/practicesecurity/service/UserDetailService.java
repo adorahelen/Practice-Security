@@ -22,6 +22,7 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String phoneNumber) {
         log.info("loadUserByUsername() 호출됨 - phoneNumber: {}", phoneNumber);
+        // 사용자의 정보를 가져오는 UserDetailsService 구현(메소드 오버라이딩) -> 이름 말고, unique(폰번호:아이디)로
 
         return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(()->new IllegalArgumentException("PhoneNumber not found"));
