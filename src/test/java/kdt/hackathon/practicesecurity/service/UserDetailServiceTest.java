@@ -36,7 +36,7 @@ class UserDetailServiceTest {
     }
 
     @Test
-    @DisplayName("서비스 to 엔티티, 번호가 존재하는 경우")
+    @DisplayName("JPA: Save & Search(디테일서비스)")
     void PhoneNumberExists() {
         // Given
         String phoneNumber = "010-1234-5678";
@@ -64,7 +64,7 @@ class UserDetailServiceTest {
     }
 
     @Test
-    @DisplayName("서비스 to 엔티티, 번호가 존재하지 않는 경우")
+    @DisplayName("No exist, Search")
     void PhoneNumberDoesNotExist() {
         // Given
         String phoneNumber = "010-9999-9999";
