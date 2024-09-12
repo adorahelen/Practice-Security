@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated() // 그 외는 인가 없어도 인증은 있어야 된다는 설정
                 .and()
                 .formLogin().loginPage("/login")
-                .defaultSuccessUrl("/articles") // 없어서 404 뜨면 성공
+                .defaultSuccessUrl("/service") // 임의로 만든 서비스 페이지
                 .and()
                 .logout().logoutSuccessUrl("/login") // 로그아웃시 이동할 경로 설정
                 .invalidateHttpSession(true)// 로그아웃 이후에 세션을 전체 삭제할지 여부 설정
