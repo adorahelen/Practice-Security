@@ -16,7 +16,7 @@ public class UserRegisterApiController {
     @PostMapping("/user")
     public String signUp(@RequestBody RegisterUser DtoRegisterUser) {
         userRegisterService.save(DtoRegisterUser); // 회원가입 메소드 호출한 상황
-        return "success"; // return "redirect:/login";
+        return "redirect:/login";
     }
 }
 // 1. 회원가입이 정상적으로 진행(ULID 발급만 성공)되어도, 현재 role 을 통해 권한의 분배는 구현하지 않은 상태
