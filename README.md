@@ -20,5 +20,8 @@
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/c226941e-bdd0-497c-8743-a9f415290fcb">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/0bcb0bc3-3f27-46b1-a4ca-f44fc81030a8">
 
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/d7903c0e-83eb-4d4e-9232-739c9116ba9c">
+
+- ERD, 롤(권한 필드 추가?), 회원테이블 추가?(관리자), 
 
 
