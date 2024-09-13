@@ -23,6 +23,10 @@
 - 로그인 성공 + 로그아웃
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/c38c40ef-e144-4651-b97d-d1ac69d176d2">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/da863ce2-ebb6-4a29-9baf-9defce9a1fcd">
+
+- 999에러 
+
 
 
 
