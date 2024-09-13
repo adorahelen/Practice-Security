@@ -25,8 +25,19 @@
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/c38c40ef-e144-4651-b97d-d1ac69d176d2">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/da863ce2-ebb6-4a29-9baf-9defce9a1fcd">
 
-- 999에러 
+- 999에러(원인 추측 1.스태틱 폴더 없는데 **허용명시 2. 로그인succesfuldefault,true없어서 3./erro예외처리 안해서?)
+ 
 
+## 09/14
+- 권한 부여(디폴트 유저, 어드민은 수동으로 변경)
+  
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/4b5f1cf0-049b-41ae-84e2-b9ffd1f0eb03">
+
+- ERROR 9510 :Exception loading sessions from persistent storage
+    * java.io.InvalidClassException
+    * local class incompatible: stream classdesc serialVersionUID = -8764145416934979531,
+    * local class serialVersionUID = -8462780352409935610 (정상적으로 돌아가지만, 서버 가동 초반 오류 로그 발생)
+    * 톰캣이 웹 어플리케이션 세션 상태를 저장하고 불러오는데서 발생 (User entity 수정이 원인 - 권한 추가 Role_USER) 
 
 
 
