@@ -14,14 +14,15 @@
 
 
 ## 09/12
-- 로그인 화면/회원가입 화면/로그인성공 화면
+- 로그인 화면/회원가입 화면
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/bafc182c-3269-422f-af17-49f0e35f9abd">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/c226941e-bdd0-497c-8743-a9f415290fcb">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/0bcb0bc3-3f27-46b1-a4ca-f44fc81030a8">
 
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/d7903c0e-83eb-4d4e-9232-739c9116ba9c">
+## 09/13
+- 로그인 성공 + 로그아웃
 
-- ERD, 롤(권한 필드 추가?), 회원테이블 추가?(관리자), 
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/c38c40ef-e144-4651-b97d-d1ac69d176d2">
+
 
 
