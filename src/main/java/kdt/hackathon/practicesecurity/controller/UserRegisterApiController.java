@@ -3,19 +3,28 @@ package kdt.hackathon.practicesecurity.controller;
 import kdt.hackathon.practicesecurity.dto.RegisterUser;
 import kdt.hackathon.practicesecurity.service.UserRegisterService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+// import org.springframework.web.bind.annotation.RequestBody;
+// 뷰에서 전송되는 타입은, JSON 이 아니기에, 리퀘스트 바디 에러가 발생한다.
+//      * 리퀘스트 바디 ( JSON 형식 데이터를 자바 객체로 자동 변환)
+// 'application/x-www-form-urlencoded;charset=UTF-8' is not supported
+import org.springframework.web.bind.annotation.ModelAttribute;
+// 따라서, 이때는 위와 같이 @ModelAttribute 를 붙여줄 수 있다.
+
+@Controller
 @RequiredArgsConstructor
+@Slf4j
 public class UserRegisterApiController {
 
     private final UserRegisterService userRegisterService;
 
-    @PostMapping("/user")
-    public String signUp(@RequestBody RegisterUser DtoRegisterUser) {
-        userRegisterService.save(DtoRegisterUser); // 회원가입 메소드 호출한 상황
+    @PostMapping("/user") // DTO로 받아서 회원가입, 저장
+    public String signUp( RegisterUser DtoRegisterUser) {// @없어도 되자만, 정석!
+       String result =  userRegisterService.save(DtoRegisterUser); // 회원가입 메소드 호출한 상황
+        log.info(result);
         return "redirect:/login";
     }
 }
