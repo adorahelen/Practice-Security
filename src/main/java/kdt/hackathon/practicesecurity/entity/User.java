@@ -2,6 +2,7 @@ package kdt.hackathon.practicesecurity.entity;
 
 import com.github.f4b6a3.ulid.Ulid; // ULID 사용
 import jakarta.persistence.*;
+import kdt.hackathon.practicesecurity.auth.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,12 +37,15 @@ public class User implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Builder // @Builder는 빌더 패턴을 적용해 객체 생성을 유연하게
     public User(String phoneNumber,
                 String password,
                 String birthDate,
-                String name)
+                String name,
+                Role role)
     {
         this.id = Ulid.fast().toString();
         // 각 User 객체가 생성될 때마다 고유한 ULID가 기본키로 자동 생성
@@ -50,12 +54,14 @@ public class User implements UserDetails {
         this.password = password;
         this.birthDate = birthDate;
         this.name = name;
+        this.role = role;
     }
 
     @Override // 권한 반환
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        // 이부분 권한 지정, 어르신들은 ROLE_USER <-> 개발자는 ROLE_ADMIN
+        // 이부분 권한 지정, 어르신들은 ROLE_USER <-> 개발자는 ROLE_ADMIN(워크브랜치에서 개별 수정)
+        // 디폴트는 모든 계정이 회원가입 시도할때 "유저"로 권한을 부여한다.
     }
 
     @Override // 사용자의 고유한 아이디를 반환 -> 반드시 고유. 유니크 속성 적용

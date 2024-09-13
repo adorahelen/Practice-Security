@@ -1,5 +1,6 @@
 package kdt.hackathon.practicesecurity.service;
 
+import kdt.hackathon.practicesecurity.auth.Role;
 import kdt.hackathon.practicesecurity.dto.RegisterUser;
 import kdt.hackathon.practicesecurity.entity.User;
 import kdt.hackathon.practicesecurity.repository.UserRepository;
@@ -19,8 +20,11 @@ public class UserRegisterService {
                 .phoneNumber(dto.getPhoneNumber())
                 .birthDate(dto.getBirthDate())
                 .name(dto.getName())
+                .role(Role.ROLE_USER)
                 .password(bCryptPasswordEncoder.encode(dto.getPassword())) // 추후 암호화 방식 변경*
                 .build();
+
+           // user.getAuthorities(); 필요없네
 
         return userRepository.save(user).getId(); // ULID 방식으로 생성한 기본키 반환
         // 반환 없애고 String -> Void ?
