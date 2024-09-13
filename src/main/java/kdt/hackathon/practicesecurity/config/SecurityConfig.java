@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+// 로그인 : (누구인지 확인) -> 인증(어센틱)
+// 권한 확인 : 인가(어쏘) [관리자는 관리자페이지, 일반사용자는 X]
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -36,12 +38,23 @@ public class SecurityConfig {
                 // 누구나 접근이 가능하도록, 설정한 url (인증+인가) 없이도
                 .anyRequest().authenticated() // 그 외는 인가 없어도 인증은 있어야 된다는 설정
                 .and()
-                .formLogin().loginPage("/login")
+
+                .formLogin()
+                .loginPage("/login")
                 .defaultSuccessUrl("/service") // 임의로 만든 서비스 페이지
                 .and()
-                .logout().logoutSuccessUrl("/login") // 로그아웃시 이동할 경로 설정
-                .invalidateHttpSession(true)// 로그아웃 이후에 세션을 전체 삭제할지 여부 설정
-                .and().csrf().disable().build(); // csrf 비활성화
+
+                .logout()
+                .logoutUrl("/logout") // 로그아웃 URL 설정 (기본 값은 `/logout`)
+                .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동할 URL
+                .invalidateHttpSession(true) // 로그아웃 후 세션 무효화
+                .deleteCookies("JSESSIONID") // 로그아웃 시 세션 쿠키 삭제
+                .and()
+
+                // 로그아웃(+로그인)메서드를 따로 만들어도 되고, 위에처럼 시큐리티 제공을 사용해도 괜찮다
+
+                .csrf().disable()
+                .build(); // csrf 비활성화
     } // 세션이 적용이 된건가???????????
 
     // 3. 인증 관리자 관련 설정
