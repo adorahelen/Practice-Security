@@ -2,7 +2,7 @@ package kdt.hackathon.practicesecurity.entity;
 
 import com.github.f4b6a3.ulid.Ulid; // ULID 사용
 import jakarta.persistence.*;
-import kdt.hackathon.practicesecurity.auth.Role;
+import kdt.hackathon.practicesecurity.authority.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

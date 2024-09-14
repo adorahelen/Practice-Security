@@ -1,6 +1,6 @@
 package kdt.hackathon.practicesecurity.service;
 
-import kdt.hackathon.practicesecurity.auth.Role;
+import kdt.hackathon.practicesecurity.authority.Role;
 import kdt.hackathon.practicesecurity.dto.RegisterUser;
 import kdt.hackathon.practicesecurity.entity.User;
 import kdt.hackathon.practicesecurity.repository.UserRepository;

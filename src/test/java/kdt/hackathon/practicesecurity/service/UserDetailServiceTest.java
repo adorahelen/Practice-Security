@@ -1,6 +1,6 @@
 package kdt.hackathon.practicesecurity.service;
 
-import kdt.hackathon.practicesecurity.auth.Role;
+import kdt.hackathon.practicesecurity.authority.Role;
 import kdt.hackathon.practicesecurity.entity.User;
 import kdt.hackathon.practicesecurity.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package kdt.hackathon.practicesecurity.auth;
+package kdt.hackathon.practicesecurity.authority;
 
 import lombok.Getter;
 
