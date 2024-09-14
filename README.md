@@ -40,4 +40,10 @@
     * 톰캣이 웹 어플리케이션 세션 상태를 저장하고 불러오는데서 발생 (User entity 수정이 원인 - 권한 추가 Role_USER) 
 
 
+## 09/15 
+- 일반 유저가 관리자 홈페이지에 접속한 결과 : ROLE_USER => /admin
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/8a2fbc30-18f7-45f0-b7a8-1ce6620f972f">
+
+- 관리자가, 관리자 홈페이지에 접속한 화면 : ROLE_ADMIN => /admin
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/1070f026-3661-4303-b440-94e8a486bd49">
 
