@@ -3,12 +3,17 @@ package kdt.hackathon.practicesecurity.auth;
 import lombok.Getter;
 
 @Getter
-
 public enum Role {
     ROLE_ADMIN("admin"), ROLE_USER("user");
+
     private final String description;
+
     Role(String description) {
         this.description = description;
+    }
+
+    public String getAuthority() { // 이게 없어서, 권한을 가져오지 못했다.
+        return this.name(); // ROLE_ADMIN, ROLE_USER
     }
 }
 // 롤의 경우, 디폴트를 유저로 설정하고
