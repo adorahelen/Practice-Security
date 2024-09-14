@@ -51,7 +51,6 @@ public class UserRegisterApiControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.csrf()) // CSRF 토큰을 추가
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(registerUser))) // request body를 JSON으로 변환
-//                .andExpect(status().isOk()) // 200 OK 응답을 기대
-//                .andExpect(content().string("redirect:/login")); // 응답 메시지 "success" 기대
-//    }
+                .andExpect(content().string("")); // 응답 메시지 "success" 기대
+   }
 }
