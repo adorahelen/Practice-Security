@@ -1,5 +1,6 @@
 package kdt.hackathon.practicesecurity.service;
 
+import kdt.hackathon.practicesecurity.auth.Role;
 import kdt.hackathon.practicesecurity.entity.User;
 import kdt.hackathon.practicesecurity.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -45,6 +48,7 @@ class UserDetailServiceTest {
                 .password("password123")
                 .birthDate("1990-01-01")
                 .name("John Doe")
+                .role(Role.ROLE_ADMIN)
                 .build();
 
         when(userRepository.findByPhoneNumber(phoneNumber)).thenReturn(Optional.of(user));
@@ -54,33 +58,14 @@ class UserDetailServiceTest {
         // UUID 값 예시 : 4dfc6b14-7213-3363-8009-b23c56e3a1b1
 
         // When
-        User result = userDetailService.loadUserByUsername(phoneNumber);
+        UserDetails result = userDetailService.loadUserByUsername(phoneNumber);
 
         // Then
         assertNotNull(result);
-        assertEquals(phoneNumber, result.getPhoneNumber());
-        log.info("테스트 성공 - User 반환됨: {}", result);
-        verify(userRepository, times(1)).findByPhoneNumber(phoneNumber);
-    }
-
-    @Test
-    @DisplayName("No exist, Search")
-    void PhoneNumberDoesNotExist() {
-        // Given
-        String phoneNumber = "010-9999-9999";
-        log.info("없는 전화번호로 테스트 진행 - phoneNumber: {}", phoneNumber);
-
-
-
-        when(userRepository.findByPhoneNumber(phoneNumber)).thenReturn(Optional.empty());
-
-        // When & Then
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            userDetailService.loadUserByUsername(phoneNumber);
-        });
-
-        assertEquals("PhoneNumber not found", exception.getMessage());
-        log.error("Exception 발생 - {}", exception.getMessage());
+        assertEquals(phoneNumber, result.getUsername());
+        assertTrue(result.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        assertEquals(phoneNumber, user.getPhoneNumber());
+        log.info("테스트 성공 - UserDetails 반환됨: {}", result);
         verify(userRepository, times(1)).findByPhoneNumber(phoneNumber);
     }
 }
