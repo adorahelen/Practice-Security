@@ -41,9 +41,9 @@
 
 
 ## 09/15 
-- 일반 유저가 관리자 홈페이지에 접속한 결과
+- 일반 유저가 관리자 홈페이지에 접속한 결과 : ROLE_USER => /admin
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/8a2fbc30-18f7-45f0-b7a8-1ce6620f972f">
 
--관리자가, 관리자 홈페이지에 접속한 화면
+- 관리자가, 관리자 홈페이지에 접속한 화면 : ROLE_ADMIN => /admin
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/1070f026-3661-4303-b440-94e8a486bd49">
 
