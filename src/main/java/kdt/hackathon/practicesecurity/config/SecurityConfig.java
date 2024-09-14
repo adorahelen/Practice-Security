@@ -33,11 +33,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeRequests()
-                .requestMatchers("/login", "/signup", "/user").permitAll()
-                // 누구나 접근이 가능하도록, 설정한 url (인증+인가) 없이도
-                .anyRequest().authenticated() // 그 외는 인가 없어도 인증은 있어야 된다는 설정
-                .and()
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/service").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/login", "/signup", "/user").permitAll())
+               // .anyRequest().authenticated() // 그 외는 인가 없어도 인증은 있어야 된다는 설정
+
 
                 .formLogin()
                 .loginPage("/login")
