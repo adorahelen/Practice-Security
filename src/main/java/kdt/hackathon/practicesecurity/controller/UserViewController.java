@@ -19,4 +19,8 @@ public class UserViewController {
     public String service() {
         return "service";
     }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";}
 }
