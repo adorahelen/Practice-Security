@@ -39,7 +39,7 @@ class UserDetailServiceTest {
     }
 
     @Test
-    @DisplayName("JPA: Save & Search(디테일서비스)")
+    @DisplayName("전화번호가 존재할 때 권한 반환 확인")
     void PhoneNumberExists() {
         // Given
         String phoneNumber = "010-1234-5678";

@@ -20,7 +20,7 @@ import java.util.Collections;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserDetailService implements UserDetailsService {
+public class UserDetailService implements UserDetailsService { // UserDetailsService 핵심, 컨피그는 필터 설정만
 
     private final UserRepository userRepository;
 
@@ -32,10 +32,18 @@ public class UserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with phone number: " + phoneNumber));
 // 여기까지가 기존 서비스에서 진행한 (회원가입 후 디비에 저장하는 부분이고), 아래에 리턴문은 인증정보(인가)를 리턴에서 시큐리티에게 전달(필터)한테
 
+        // 09/15 :
+        //   UserDetailService가 UserDetails를 반환하도록 해야 하고,  -> 기존에는 유저를 반환했을꺼임(잘못된 코드)
+        //   반환된 UserDetails 객체에서 권한을 확인할 수 있어야 했었다 -> Role 이 Enum class 라 가져오는 것도 쉽지 않았다.
+        // 사용처는 config/SecurityConfig 클래스 내부, @Bean public AuthenticationManager 를 통해 인증 및 인가 작업에 사용
+
+        // UserDetails 객체 생성 및 반환 *****
         return new org.springframework.security.core.userdetails.User(
                 user.getPhoneNumber(),
                 user.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getAuthority())) // 권한 설정
+                // user.getRole() 하면 되는데, Role 을 스트링이 아닌, Enum 으로 설정해놔서, Enum 안에 메소드 호출을 통해 읽어옴
+                // SimpleGrantedAuthority는 String 타입의 권한을 필요로 하기 때문에, Role enum을 String으로 변환하여 사용해야함
         );
     }
 }

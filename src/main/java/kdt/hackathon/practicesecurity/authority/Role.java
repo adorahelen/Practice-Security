@@ -14,6 +14,7 @@ public enum Role {
 
     public String getAuthority() { // 이게 없어서, 권한을 가져오지 못했다.
         return this.name(); // ROLE_ADMIN, ROLE_USER
+       // Role enum에서 권한 문자열을 반환하도록 메서드 추가
     }
 }
 // 롤의 경우, 디폴트를 유저로 설정하고
