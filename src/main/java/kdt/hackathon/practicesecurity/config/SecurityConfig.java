@@ -3,6 +3,7 @@ package kdt.hackathon.practicesecurity.config;
 // 인증을 위한 엔티티 -> 리포 -> 서비스, done(테스트도 성공, ULID로 기본키 생성)
 // 실제 인증 처리를 진행하는 설정파일 작성 ****
 
+import kdt.hackathon.practicesecurity.handler.LoginFailHandler;
 import kdt.hackathon.practicesecurity.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,31 +33,37 @@ public class SecurityConfig {
     // 2. 특정 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+        http
+                .csrf().disable()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/service").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/login", "/signup", "/user").permitAll())
-               // .anyRequest().authenticated() // 그 외는 인가 없어도 인증은 있어야 된다는 설정
-
 
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/service") // 임의로 만든 서비스 페이지
+                .failureHandler((new LoginFailHandler()))
+
                 .and()
 
                 .logout()
                 .logoutUrl("/logout") // 로그아웃 URL 설정 (기본 값은 `/logout`)
-                .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동할 URL
                 .invalidateHttpSession(true) // 로그아웃 후 세션 무효화
-                .deleteCookies("JSESSIONID") // 로그아웃 시 세션 쿠키 삭제
+                .deleteCookies("JSESSIONID") // JSESSIONID : 톰캣 컨테이너 세션 유지 '키'
+                .logoutSuccessUrl("/login")
+
                 .and()
+                .sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false);
 
                 // 로그아웃(+로그인)메서드를 따로 만들어도 되고, 위에처럼 시큐리티 제공을 사용해도 괜찮다
 
-                .csrf().disable()
-                .build(); // csrf 비활성화
-    } // 세션이 적용이 된건가???????????
+        return http.build();
+
+              //  .build(); // csrf 비활성화
+    } // 세션이 적용이 된건가??????????? : 스프링 시큐리티 자동제공(로그안-인증/인가)
 
     // 3. 인증 관리자 관련 설정
     // * 사용자 정보를 가져올 서비스 재정의 , 인증방법 등을 설정 (LDAP / JDBC 기반)
@@ -73,7 +80,7 @@ public class SecurityConfig {
                 .passwordEncoder(bCryptPasswordEncoder)
                 .and()
                 .build();
-    }
+    }// authenticationManager + builder 를 통해 사용자 로그인 계정을 설정
 
 
 
