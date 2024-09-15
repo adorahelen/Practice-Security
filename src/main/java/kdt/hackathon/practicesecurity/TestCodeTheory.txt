@@ -1,0 +1,23 @@
+[ Mockito 사용법 ]
+- BDD(Behavior-Driven-Development, 행동 주도 개발)에서 유래된 Given , when , then 패턴
+
+* Given
+목적: 테스트에 필요한 상태를 설정하고, 모의 객체의 행동을 정의, 작업: 모의 객체 생성, 스텁(stub) 설정 등
+
+* When
+목적: 테스트할 행동 또는 메서드를 실행함,작업: 테스트 대상 메서드 호출
+
+* Then
+목적: 예상 결과를 검증함, 작업: 검증(verify)과 단언(assertion)
+
+[ 코드 ]
+1. 모의 객체(Mock) 생성
+List mockedList = Mockito.mock(List.class);
+
+2.스텁 설정(Stubbing)
+반환값 설정 : when(...).thenReturn(...), 예외 발생 : when(...).thenThrow(...)
+
+3. 메서드 호출 검증(Verification)
+   assertEquals(...) : JUnit을 사용하여 반환 값이 예상 값과 일치하는지 검증합니다.
+   verify(...) 특정 메서드가 호출되었는지 확인합니다.
+
