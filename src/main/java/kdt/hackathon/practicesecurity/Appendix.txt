@@ -1,0 +1,54 @@
+1. Authentication: Principal 확장
+인증 프로세스의 필수 인터페이스로 인증 요청 이벤트를 나타냄
+요청한 엔티티의 세부정보를 담음
+public interface Authentication extends Principal, Serializable {
+    Collection<? extends GrantedAuthority> getAuthorities(); // 권한 반환
+    Object getCredentials(); // 암호 반환
+    Object getDetails();
+    Object getPrincipal();
+    boolean isAuthenticated(); // 인증 종료 여부
+    void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException;
+}
+
+
+2. AuthenticationProvider
+   인증 논리 담당, 요청을 허용할지 결정하는 조건 명령 발견
+   AuthenticationManager 로부터 책임을 위임 받음
+   public interface AuthenticationProvider {
+       Authentication authenticate(Authentication authentication) throws AuthenticationException;
+       //인증 실패시 예외 투척
+       //인증 성공시 Authentication 객체 반환 - isAuthenticated: true
+       //인증 실패시 null 반환 - 형식은 Authentication 이지만 세부정보가 일치 하지 않음
+       boolean supports(Class<?> authentication);
+       //Authentication 객체로 제공된 형식이면 true
+   }
+
+
+3. AuthenticationManager
+Filter로 부터 받은 요청을 Provider를 이용해 요청을 인증한다
+재정의한 CustomAuthenticationProvider를 AuthencicationManager가 가질 수 있도록 설정을 해줘야한다
+
+
+4. SecurityContext
+   인증 로직이 완료된 후 Authentication 객체를 저장 관리하는 역할
+   SecurityContext에 접근하여 사용자 정보를 사용할 수 있다
+
+   public interface SecurityContext extends Serializable{
+     Authentication getAuthentication();
+     void setAuthentication(Authentication authentication);
+   }
+   MODE_THREADLOCAL: 각 스레드가 저장 가능, 일반적인 방법
+   MODE_INHERITABLETHREADLOCAL: 비동기 메서드경우 스레드 복사하여 사용
+   MODE_GLOBAL: 모든 스레드가 같은 컨텍스트 사용
+
+
+
+   [직렬화 종류와 스프링 시큐리티의 연관성]
+   * Serializable 인터페이스를 구현함으로써, 객체를 직렬화하고 역직렬화할 수 있습니다.
+   (자바 직렬화에 쓰이는 인터페이스와 동일하다.)
+    이유 : 자바의 Serializable 인터페이스는 객체를 직렬화하여 바이트 스트림으로 변환할 수 있도록 허용하는 인터페이스
+          스프링 시큐리티의 SecurityContext와 그 안의 Authentication 객체는 세션 관리를 위해 직렬화가 필요
+    etc : 그 외 Google Gson 라이브러리(네트워크 통한 데이터 교환)
+          ObjectMapper : Gson과 유사하게 동작하지만 성능과 기능면에서 더 많은 옵션을 제공
+
+
