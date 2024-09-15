@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 // 권한 확인 : 인가(어쏘) [관리자는 관리자페이지, 일반사용자는 X]
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
     private final UserDetailService userService;
 
@@ -43,13 +45,22 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/service") // 임의로 만든 서비스 페이지
+                // 에러 났을때 처리도 해줘야 함
                 .failureHandler((new LoginFailHandler()))
 
+
+//                .and()
+//                .rememberMe()
+//                .rememberMeParameter("remember-me")
+//                .tokenValiditySeconds(300)
                 .and()
+
+
 
                 .logout()
                 .logoutUrl("/logout") // 로그아웃 URL 설정 (기본 값은 `/logout`)
                 .invalidateHttpSession(true) // 로그아웃 후 세션 무효화
+                .clearAuthentication(true)
                 .deleteCookies("JSESSIONID") // JSESSIONID : 톰캣 컨테이너 세션 유지 '키'
                 .logoutSuccessUrl("/login")
 
