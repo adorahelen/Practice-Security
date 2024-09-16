@@ -58,10 +58,22 @@ public class User implements UserDetails {
     }
 
     @Override // 권한 반환
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        // 이부분 권한 지정, 어르신들은 ROLE_USER <-> 개발자는 ROLE_ADMIN(워크브랜치에서 개별 수정)
-        // 디폴트는 모든 계정이 회원가입 시도할때 "유저"로 권한을 부여한다.
+    public Collection<? extends GrantedAuthority> getAuthorities() { // 권한 지정 X, 권한 "반환"
+        return null; // 와 이부분 전혀 안쓰이고 있었다. (오버라이드니까, 커스텀 해서 쓰라고 해논건데)
+        //          * 전혀 커스텀 안하고 그냥 만들어서 방치해두고 있었다. null 해도 아무 문제 없음
+
+    /*        return user.getRoles().stream()
+            .map(role -> new SimpleGrantedAuthority(role.getDescription()))  // 'ROLE_USER'와 같은 권한
+            .collect(Collectors.toList());
+    } 기존에 작성되어 있던 방식은 스프링 시큐리티가 인식할 수 있는 방식이 아니었다. 혹은 유저로 명시해서 (유저만)
+        ( return List.of(new SimpleGrantedAuthority("ROLE_USER")); )
+        아무튼, 권한 반환이 정상적으로 진행되지 못했고, 이를 해결하기 위해 서비스단에 아래와 같은 코드를 작성해 해결
+
+                return new org.springframework.security.core.userdetails.User(
+                user.getPhoneNumber(),
+                user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getAuthority()))
+    * */
     }
 
     @Override // 사용자의 고유한 아이디를 반환 -> 반드시 고유. 유니크 속성 적용
