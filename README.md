@@ -59,14 +59,7 @@
 ## 09/17
 - 구글 OAuth2 
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/455ab13a-04d3-4b83-9dcc-be51a5141991">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/8322b68c-e522-446c-9feb-15c472cb013a">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/f75978c4-4cb3-45d3-ac8d-4ad57dd390b4">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/f10472f9-1257-41ba-9a18-4b2dac280ffd">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/9f7078a0-fdbb-4a20-ae7d-8a0e656773c0">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/79e91226-d649-4b38-bab1-0b24742b8299">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/b6e733bc-e945-465d-ab6d-00e20b81bb92">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/699b348d-1933-4efd-8dee-667b61450402">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/64808f81-144e-435a-8929-28453809d388">
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/1779df7a-868a-4cb8-a3ae-47067f2691df">
 
