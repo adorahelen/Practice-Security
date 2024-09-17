@@ -40,12 +40,17 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "nickname", unique = true)
+    private String nickname;
+
+
     @Builder // @Builder는 빌더 패턴을 적용해 객체 생성을 유연하게
     public User(String phoneNumber,
                 String password,
                 String birthDate,
                 String name,
-                Role role)
+                Role role,
+                String nickname)
     {
         this.id = Ulid.fast().toString();
         // 각 User 객체가 생성될 때마다 고유한 ULID가 기본키로 자동 생성
@@ -55,6 +60,14 @@ public class User implements UserDetails {
         this.birthDate = birthDate;
         this.name = name;
         this.role = role;
+        this.nickname = nickname;
+    }
+
+    // 사용자 정보를 조회하여, 유저 테이블에 사용자 정보가 있다면, 리소스 서버에서 제공해주는 이름을 업데이트(구글)
+    // 없다면 유저 테이블에서 새 사용자를 생성해 데이터베이스에 저장
+    public User update(String nickname) {
+        this.nickname = nickname;
+        return this;
     }
 
     @Override // 권한 반환
