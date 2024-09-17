@@ -37,4 +37,4 @@ out/
 .vscode/
 
 # Ignore application.yml
-/application.yml
+resources/application.yml
