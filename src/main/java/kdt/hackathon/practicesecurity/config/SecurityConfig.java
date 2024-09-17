@@ -1,8 +1,6 @@
 package kdt.hackathon.practicesecurity.config;
 
-// 인증을 위한 엔티티 -> 리포 -> 서비스, done(테스트도 성공, ULID로 기본키 생성)
-// 실제 인증 처리를 진행하는 설정파일 작성 ****
-
+import kdt.hackathon.practicesecurity.OAuth2.OAuth;
 import kdt.hackathon.practicesecurity.handler.LoginFailHandler;
 import kdt.hackathon.practicesecurity.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +11,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import kdt.hackathon.practicesecurity.OAuth2.OAuth2UserCustomService;
 
 // 로그인 : (누구인지 확인) -> 인증(어센틱)
 // 권한 확인 : 인가(어쏘) [관리자는 관리자페이지, 일반사용자는 X]
@@ -38,20 +36,26 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                // url 권한 메핑
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/service").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/login", "/signup", "/user", "/access-denied").permitAll() // 접근 허용
+//                      .requestMatchers("/service").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/service").authenticated()
+                        .anyRequest().permitAll() // 접근 허용
                 )
+                // 핸들러 처리
                 .exceptionHandling()
-                .accessDeniedHandler(new CustomAccessDeniedHandler()) // 접근 권한이 없는 경우 핸들러로 처리
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
 
+                // 로그인
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .failureUrl("/login-error")
                 .defaultSuccessUrl("/service")
                 .failureHandler(new LoginFailHandler())
 
+                // 로그아웃
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -60,13 +64,27 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/login")
 
+                // Oauth2 (구글)
                 .and()
-                .sessionManagement()
-                .sessionFixation().changeSessionId()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .invalidSessionUrl("/")
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false);
+                .oauth2Login()
+                .loginPage("/login")  // 로그인 페이지 설정
+                .successHandler(new OAuth());
+
+ //               .failureUrl("/login-error")  // 로그인 실패 시 이동할 URL
+//                .userInfoEndpoint() // OAuth2 로그인 성공 후 사용자 정보를 가져올 때의 설정
+//                .userService(oAuth2UserCustomService); // 사용자 정보를 처리하는 서비스
+
+        // 세션 조정과 동시에 사용할수는 없나?
+        //Spring Security에서는 OAuth2 인증이 완료된 후, 해당 인증 정보가 세션에 저장
+        // 그러나 세션 관리 방식이 SessionCreationPolicy.ALWAYS나 IF_REQUIRED로 설정되면,
+                                    // OAuth2 인증 정보와 세션 관리 방식 간에 충돌이 발생
+//                .and()
+//                .sessionManagement()
+//                .sessionFixation().changeSessionId()
+//                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .invalidSessionUrl("/")
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(false);
 
         return http.build();
     }
@@ -95,26 +113,6 @@ public class SecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }
-  /* 비밀번호 암호화 전략
-    - 단방향 해시 함수 ( One-Way Hash Function )
-         8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
-         (SHA-256 을 통해 123456 을 해싱한 값, 다이제스트라고 하며 입력값에 따라 동일한 결과)
-      # 위 다이제스트는 항상 같은 값, -> 레인보우 테이블에 전부 등록되어 있음
-      # 무차별 대입공격 (브루트포스) 취약, 해쉬충돌도 고려해야함(두개의 입력이 동일한 값을 가지는 현상) -> 바뀌치기 가
-
-   - 솔트 (Salt)
-        * 해시함수를 돌리기 전에 원문에 임의의 문자열을 덧붙이는 것
-        password + salt -> Hash -> Digest
-
-        ex:
-        사용자1과 사용자2가 123456 이라는 같은 password 를 사용
-        사용자1은 솔트 값이 sffs13osz043opq9dsfdkj32 이고, 사용자2는 osela31dif3298hcwaw8s301
-        (SHA-256 적용)
-        343099b2867417f1b60462a8c70aa9dc33f4b1cec287fdb22e9fcf9b999ee3ce : 사용자1의 암호
-        725c8c66c181855dd578961d90b2a051a250b232ede85a7ab5da5d0d4586d135 : 사용자2의 암호
-
-  - 개발 프로세스
-        1. HASH 알고리즘 선택(SHA-256) import java.security.MessageDigest;
-        2. 난수생성기로 난수 생성하기, import java.security.SecureRandom;
-     */
