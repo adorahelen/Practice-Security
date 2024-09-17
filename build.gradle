@@ -25,6 +25,10 @@ repositories {
 
 dependencies {
 
+    // OAuth2 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+
     implementation 'com.github.f4b6a3:ulid-creator:5.1.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
