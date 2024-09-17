@@ -1,0 +1,16 @@
+1. GrantedAuthority
+public interface GrantedAuthority extends Serializable {
+    String getAuthority();  }
+        // 본 프로젝트는, 이넘 롤에 명시되어 있음
+
+- 권한은 UserDetails에서 사용한다
+public interface UserDetails extends Serializable {
+    Collection<? extends GrantedAuthority> getAuthorities(); }
+
+    //생략 => 유저 엔티티에서, 유저 디테일스 구현하고 오버라이딩 강제된 메소드
+         * public Collection<? extends GrantedAuthority> getAuthorities() {
+
+
+2. EndPoint 접근 설정 (컨트롤러에 매핑하는 주소)
+hasAuthority(): 단일 권한
+hasAnyAuthority(): 복수 권한
