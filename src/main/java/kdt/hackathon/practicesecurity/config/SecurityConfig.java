@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import kdt.hackathon.practicesecurity.OAuth2.OAuth2UserCustomService;
 
 // 로그인 : (누구인지 확인) -> 인증(어센틱)
 // 권한 확인 : 인가(어쏘) [관리자는 관리자페이지, 일반사용자는 X]
