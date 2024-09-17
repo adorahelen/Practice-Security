@@ -47,3 +47,26 @@
 - 관리자가, 관리자 홈페이지에 접속한 화면 : ROLE_ADMIN => /admin
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/1070f026-3661-4303-b440-94e8a486bd49">
 
+
+## 09/16
+- 세션 설정(스프링 시큐리티, 기본제공 -> 조정)
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/95c35960-2fb7-4e28-bbdd-118a53acd0cb">
+
+
+
+
+## 09/17
+- 구글 OAuth2 
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/455ab13a-04d3-4b83-9dcc-be51a5141991">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/8322b68c-e522-446c-9feb-15c472cb013a">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/f75978c4-4cb3-45d3-ac8d-4ad57dd390b4">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/f10472f9-1257-41ba-9a18-4b2dac280ffd">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/9f7078a0-fdbb-4a20-ae7d-8a0e656773c0">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/79e91226-d649-4b38-bab1-0b24742b8299">
+
+
+
+
+
