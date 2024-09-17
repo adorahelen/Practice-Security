@@ -1,5 +1,6 @@
 package kdt.hackathon.practicesecurity.service;
 
+import jakarta.servlet.http.HttpSession;
 import kdt.hackathon.practicesecurity.entity.User;
 import kdt.hackathon.practicesecurity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest; // HttpServletRequest를 사용하기 위한 import
+
 
 import java.util.Collections;
 
@@ -23,11 +26,23 @@ import java.util.Collections;
 public class UserDetailService implements UserDetailsService { // UserDetailsService 핵심, 컨피그는 필터 설정만
 
     private final UserRepository userRepository;
+    private final HttpServletRequest request;  // HttpServletRequest를 주입 받음
+
 
     @Override
     public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
         log.info("loadUserByUsername() 호출됨 - phoneNumber: {}", phoneNumber);
         // 사용자의 정보를 가져오는 UserDetailsService 구현( 여기서, Role:enum 으로부터 권한도 가지고 온다=어떤 롤인지)
+
+        // 세션 ID 출력
+        HttpSession httpSession = request.getSession(false); // 세션을 생성하지 않고 존재하는 세션만 가져옴
+        if (httpSession != null) {
+            log.info("Session ID: {}", httpSession.getId()); // 세션 ID 출력
+        } else {
+            log.info("Session is null");
+        }
+
+
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with phone number: " + phoneNumber));
 // 여기까지가 기존 서비스에서 진행한 (회원가입 후 디비에 저장하는 부분이고), 아래에 리턴문은 인증정보(인가)를 리턴에서 시큐리티에게 전달(필터)한테

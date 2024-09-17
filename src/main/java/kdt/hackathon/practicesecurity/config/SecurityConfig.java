@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -20,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 // 권한 확인 : 인가(어쏘) [관리자는 관리자페이지, 일반사용자는 X]
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity(debug = true)
+// @EnableWebSecurity(debug = true)
 public class SecurityConfig {
     private final UserDetailService userService;
 
@@ -40,41 +41,35 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/service").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/login", "/signup", "/user").permitAll())
+                        .requestMatchers("/login", "/signup", "/user", "/access-denied").permitAll() // 접근 허용
+                )
+                .exceptionHandling()
+                .accessDeniedHandler(new CustomAccessDeniedHandler()) // 접근 권한이 없는 경우 핸들러로 처리
 
+                .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/service") // 임의로 만든 서비스 페이지
-                // 에러 났을때 처리도 해줘야 함
-                .failureHandler((new LoginFailHandler()))
+                .defaultSuccessUrl("/service")
+                .failureHandler(new LoginFailHandler())
 
-
-//                .and()
-//                .rememberMe()
-//                .rememberMeParameter("remember-me")
-//                .tokenValiditySeconds(300)
                 .and()
-
-
-
                 .logout()
-                .logoutUrl("/logout") // 로그아웃 URL 설정 (기본 값은 `/logout`)
-                .invalidateHttpSession(true) // 로그아웃 후 세션 무효화
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .deleteCookies("JSESSIONID") // JSESSIONID : 톰캣 컨테이너 세션 유지 '키'
+                .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/login")
 
                 .and()
                 .sessionManagement()
+                .sessionFixation().changeSessionId()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .invalidSessionUrl("/")
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false);
 
-                // 로그아웃(+로그인)메서드를 따로 만들어도 되고, 위에처럼 시큐리티 제공을 사용해도 괜찮다
-
         return http.build();
-
-              //  .build(); // csrf 비활성화
-    } // 세션이 적용이 된건가??????????? : 스프링 시큐리티 자동제공(로그안-인증/인가)
+    }
 
     // 3. 인증 관리자 관련 설정
     // * 사용자 정보를 가져올 서비스 재정의 , 인증방법 등을 설정 (LDAP / JDBC 기반)
