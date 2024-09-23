@@ -64,6 +64,13 @@
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/1779df7a-868a-4cb8-a3ae-47067f2691df">
 
 
+## 09/18
+- JWT 토큰 : base64-encoded secret key cannot be null or empty.
+    * key 값으로 설정한 문자열 길이가 너무 짧으면 발생
+    * 미쳐 생각 못했는데, 엔티티 부분에 수정이 많아져서(특히 ULID 적용) -> 토큰 에러 증가함 
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/55e6b098-1123-42bf-8cc9-89076aafcda2">
+
 
 
 
