@@ -24,6 +24,8 @@ repositories {
 }
 
 dependencies {
+    // 이메일이나 전화번호 유효성 검증 (정규식)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // JWT 서비스 적용 후, 오스랑 통합하기
     implementation 'io.jsonwebtoken:jjwt:0.9.1' // jwt 라이브러리

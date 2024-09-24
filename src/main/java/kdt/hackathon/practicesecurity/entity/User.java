@@ -7,9 +7,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 
 import java.util.Collection;
 import java.util.List;
@@ -26,10 +31,12 @@ public class User implements UserDetails {
     @Id
     @Column(name = "id")
     private String id; // ULID 를 기본키로 설정한다.
-    // *전화번호(아이디)가 기본키가 되면, 식별은 가능하지만, 노출될 위험이 있기 때문에 -> UUID or ULID 사용
-    // => 비밀번호 찾기는 필요하지만, 아이디 찾기는 불필요하다.
+
     @Column(name = "phoneNumber", unique = true, nullable = false)
-    private String phoneNumber; // 로그인 아이디
+    @NotNull
+    @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}", message = "전화번호 형식이 맞지 않습니다.")
+    private String phoneNumber;
+
     @Column(name = "password", nullable = false)
     private String password; // 로그인 패스워드
     @Column(name = "birthDate", nullable = false)
