@@ -9,8 +9,12 @@ import kdt.hackathon.practicesecurity.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Duration;
+import java.util.Date;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,5 +58,60 @@ public class JwtTest {
                 .get("id", String.class);
 
         assertThat(userId).isEqualTo(testUser.getId().toString());
+    }
+
+    @Test
+    void invalidateToken() { // 발급되지 않은 토큰 false 로 나오는지 테스트
+        String token = JwtFactoryForTest.builder()
+                .expiration(new Date(new Date().getTime() - Duration.ofDays(7).toMillis())).build()
+                .createToken(jwtProperties);
+        // when
+        boolean result = tokenProvider.validateToken(token);
+
+        // then
+        assertThat(result).isFalse(); // 토큰 없는 경우
+    }
+
+    @Test
+    void validateToken() { // 발급된 토큰이 true 로 잘 나오는지 테스트
+        // given
+        String token = JwtFactoryForTest.jwtFactoryTestWithDefaultValues()
+                .createToken(jwtProperties);
+        // when
+        boolean result = tokenProvider.validateToken(token);
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void getAuthentication() { // 토큰을 전달받아, 인증 정보를 담은 객체를 반환한다
+        // given
+        String userPhoneNumber = "111-1561-1214";
+        String token = JwtFactoryForTest.builder()
+                .subject(userPhoneNumber)
+                .build()
+                .createToken(jwtProperties);
+
+        // when
+        Authentication authentication = tokenProvider.getAuthentication(token);
+        // then
+        assertThat(((UserDetails) authentication.getPrincipal()).getUsername()).isEqualTo(userPhoneNumber);
+
+    }
+
+    @Test
+    void getUserId() { // 토큰 기반으로 유저 아이디를 가져오는게 되는지 테스트
+        // given
+        Long userId = 1231311L; // 클레임으로 사용할 임의 아이디
+        String token = JwtFactoryForTest.builder()
+                .claims(Map.of("id", userId))
+                .build()
+                .createToken(jwtProperties);
+        // when
+        Long userIdByToken = tokenProvider.getUserIdFromToken(token);
+                // 복호화 시키는 부분은 getUserIdFromToken 메소드 안에있는 getClaims 메소드가 복호화 진행
+
+        // then
+        assertThat(userIdByToken).isEqualTo(userId);
     }
 }

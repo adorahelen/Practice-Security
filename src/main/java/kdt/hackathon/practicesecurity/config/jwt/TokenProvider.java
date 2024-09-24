@@ -34,6 +34,7 @@ public class TokenProvider {
 
         Date now = new Date();
 
+        // 테스트 코드 용이긴 하지만, 여기서 잘못 설정하면 토큰 안 만들어진다.
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 토큰 헤더
                 .setIssuer(jwtProperties.getIssuer()) // 토큰 이슈(내용), 프로퍼티스에서 작성한 내 메일
