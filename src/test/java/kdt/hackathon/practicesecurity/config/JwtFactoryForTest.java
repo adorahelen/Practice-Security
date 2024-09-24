@@ -16,7 +16,7 @@ import static java.util.Collections.emptyMap;
 @Getter
 public class JwtFactoryForTest { // = JWT 토큰 서비스를 테스트 하기위해 사용 할 "모킹" 객체 : 따라서 이름이 팩토리, 즉 공장이다.
 
-    private String subject = "test@example.com";
+    private String subject = "010-1256-9876"; // 이부분이 이메일을 사용하지 않기 때문에(엔티티), 바꿔야 했다!
     private Date issuedAt = new Date();
     private Date expiration = new Date(new Date().getTime() + Duration.ofDays(14).toMillis());
 
