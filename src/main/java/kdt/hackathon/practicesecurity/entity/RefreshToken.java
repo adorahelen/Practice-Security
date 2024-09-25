@@ -17,14 +17,14 @@ public class RefreshToken { // 엔티티 이유 : 리프레쉬 토큰은 데이�
     private Long id; // 리프레쉬 토큰 고유 아이디 (기본키)
 
     @Column(name = "user_id", nullable = false)
-    private String userId;
+    private Long userId;
     // Long => String
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
     // 생성자
-    public RefreshToken(String userId, String refreshToken) {
+    public RefreshToken(Long userId, String refreshToken) {
         this.userId = userId;
         this.refreshToken = refreshToken;
     }
