@@ -1,0 +1,27 @@
+1. application.yml ㅇㅔ 환경변수 저장하고 (깃 x)
+
+2. config/jwt/jwtProperties 에서 가지고옴 (@ConfigurationProperties("jwt")
+    : yml 에서 작성해 놓은 값들을 호출하지 않고, 담겨있는 jwtProperties 를 호출함
+
+3. config/jwt/TokenProvider 에서 복수의 메소드 작성
+    * 토큰 생성 메소드 : makeToken
+            이때 .claim("id", user.getId()) 를 통해 유저 아이디를 토큰에 담는다.
+        - 기존에 작성된 코드의 경우 이 유저 아이디가 Long 타입이지만, 현 프로젝트의 경우 ULID 적용으로 인해 String)
+
+    * 토큰 유효성 검증 메서드 : validToken
+
+    * 토큰 기반으로 인증 정보를 가져와 반환하는 메서드 : getAuthentication
+
+    * 토큰 기반으로 유저 아이디를 가져오는 메소드 : getUserID
+        - 이때 토큰을 기반으로 유저 아이디를 가지고 오는데,
+            테스트에서 설정한 유저 아이디는 Long 이었지만, 실제 사용중이 유저 아이디는 String 이기 때문에
+            : 두가지 버전의 메소드를 미리 만들어 두었다. (getUserIdLongToken & getUserIdStringToken)
+
+=============================================================================================
+위에 3개는 필수적인 세팅 클래스,
+아래 두 클래스는 테스트 클래스, (JwtFactory, jwtTest)
+그 다음은 리프레쉬 토큰을 위한 클래스
+
+
+
+

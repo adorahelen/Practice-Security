@@ -28,6 +28,14 @@ public class RefreshToken { // 엔티티 이유 : 리프레쉬 토큰은 데이�
         this.userId = userId;
         this.refreshToken = refreshToken;
     }
+    // 생성자 버전 2
+    public RefreshToken(String userId, String refreshToken) {
+        this.userId = Long.parseLong(userId);
+        this.refreshToken = refreshToken;
+    }
+
+
+
     // update method
 
     public RefreshToken updateToken(String newRefreshToken) {
