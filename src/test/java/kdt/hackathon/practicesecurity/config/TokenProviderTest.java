@@ -19,7 +19,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class JwtTest {
+public class TokenProviderTest {
     @Autowired     // 프로세스 흐름 config > TokenProvider.Class
     private TokenProvider tokenProvider; // 토큰 생성을 위해 의존성 주입
     @Autowired
@@ -101,13 +101,13 @@ public class JwtTest {
     @Test
     void getUserId() { // 토큰 기반으로 유저 아이디를 가져오는게 되는지 테스트
         // given
-        Long userId = 1231311L; // 클레임으로 사용할 임의 아이디
+        String userId = "1231311"; // 클레임으로 사용할 임의 아이디
         String token = JwtFactoryForTest.builder()
                 .claims(Map.of("id", userId))
                 .build()
                 .createToken(jwtProperties);
         // when
-        Long userIdByToken = tokenProvider.getUserIdLongToken(token);
+        String userIdByToken = tokenProvider.getUserIdStringToken(token);
                 // 복호화 시키는 부분은 getUserIdFromToken 메소드 안에있는 getClaims 메소드가 복호화 진행
 
         // then

@@ -80,11 +80,11 @@ public class TokenProvider {
     }
 
 
-    // 4. 토큰 기반으로 유저 ID를 가져오는
-    public Long getUserIdLongToken(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("id", Long.class); // 게시판에서 조회를 위해 id 반환하는거랑 비슷함
-    }
+//    // 4. 토큰 기반으로 유저 ID를 가져오는
+//    public Long getUserIdLongToken(String token) {
+//        Claims claims = getClaims(token);
+//        return claims.get("id", Long.class); // 게시판에서 조회를 위해 id 반환하는거랑 비슷함
+//    }
     // 4-2
     public String getUserIdStringToken(String token) {
         Claims claims = getClaims(token);
