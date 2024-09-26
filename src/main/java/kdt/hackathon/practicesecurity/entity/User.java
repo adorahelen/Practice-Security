@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +18,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,23 +35,77 @@ public class User implements UserDetails {
     @Column(name = "id")
     private String id; // ULID 를 기본키로 설정한다.
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password; // 로그인 패스워드
+
     @Column(name = "phoneNumber", unique = true, nullable = false)
     @NotNull
     @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}", message = "전화번호 형식이 맞지 않습니다.")
     private String phoneNumber;
 
-    @Column(name = "password", nullable = false)
-    private String password; // 로그인 패스워드
     @Column(name = "birthDate", nullable = false)
     private String birthDate;
+
     @Column(name = "name", nullable = false)
     private String name;
+
+    // 오스투에서 내려받는 정보를 위해? 추가
+    @Column(name = "nickname", unique = true)
+    private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @CreatedDate // save when Entity Created
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
+    @LastModifiedDate // save when Entity Modified
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
+    @Lob
+    @Column(name = "profile_image")
+    private byte[] profileImage;
+
+    // - 추후 운용 / OAuth2유저를 위한 VARCHAR / string 타입의 url 속성도 추가
+    @Column(name = "profile_url")
+    private String profileUrl;
+
+    @Builder
+    public User(String email,
+                String nickname)
+    {
+        this.email = email;
+        this.nickname = nickname;
+    }
+
+    @Builder // 닉네임 추가한 생성자 버전 2 추가
+    public User(String phoneNumber,
+                String password,
+                String birthDate,
+                String name,
+                Role role,
+                String nickname
+    )
+    {
+        this.id = Ulid.fast().toString();
+        // 각 User 객체가 생성될 때마다 고유한 ULID가 기본키로 자동 생성
+
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.name = name;
+        this.role = role;
+        this.nickname = nickname;
+
+    }
 
     @Builder // @Builder는 빌더 패턴을 적용해 객체 생성을 유연하게
     public User(String phoneNumber,
@@ -69,12 +126,12 @@ public class User implements UserDetails {
 
     }
 
-    // 사용자 정보를 조회하여, 유저 테이블에 사용자 정보가 있다면, 리소스 서버에서 제공해주는 이름을 업데이트(구글)
-    // 없다면 유저 테이블에서 새 사용자를 생성해 데이터베이스에 저장
-//    public User update(String name) {
-//        this.name = name;
-//        return this;
-//    }
+//     사용자 정보를 조회하여, 유저 테이블에 사용자 정보가 있다면, 리소스 서버에서 제공해주는 이름을 업데이트(구글)
+//     없다면 유저 테이블에서 새 사용자를 생성해 데이터베이스에 저장
+    public User update(String name) {
+        this.name = name;
+        return this;
+    }
 
     @Override // 권한 반환
     public Collection<? extends GrantedAuthority> getAuthorities() { // 권한 지정 X, 권한 "반환"
