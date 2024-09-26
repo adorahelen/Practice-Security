@@ -11,5 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 전화번호로 사용자를 식별 == 사용자 이름 (ULID는 기본키)
     // JPA는 메서드 규칙에 맞춰 메서드를 선언하면 이름을 분석해 자동으로 쿼리를 생성
     Optional<User> findById(String id); // Long userId -> String userId
+    Optional<User> findByEmail(String email);
 
 }
