@@ -81,10 +81,15 @@ public class TokenProvider {
 
 
     // 4. 토큰 기반으로 유저 ID를 가져오는
-    public Long getUserIdFromToken(String token) {
+    public Long getUserIdLongToken(String token) {
         Claims claims = getClaims(token);
         return claims.get("id", Long.class); // 게시판에서 조회를 위해 id 반환하는거랑 비슷함
     }
+    // 4-2
+    public String getUserIdStringToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("id", String.class);
+    } // 안쓰겠지만 헉시 모르니 일단 두가지 버전을 만들어 둠
 
 
     // * 클레임 가져오는 메소드 (부가적임)

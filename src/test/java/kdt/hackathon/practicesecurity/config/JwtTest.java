@@ -32,7 +32,7 @@ public class JwtTest {
     @Test
     void generateToken() {
         // given
-        String phoneNumber = "111-1561-1214"; // 전번 계속 바꿔주거나 디비에서 날려야함 (중복X)
+        String phoneNumber = "333-3333-1214"; // 전번 계속 바꿔주거나 디비에서 날려야함 (중복X)
         User user = User.builder()
                 .phoneNumber(phoneNumber)
                 .password("password123")
@@ -43,7 +43,6 @@ public class JwtTest {
 
 
         User testUser = userRepository.save(user);
-        // 이거 문제가 생길수도? : ㅇㅇ 생겼네요
 
         // when
         String token = tokenProvider.generateToken(testUser, Duration.ofDays(14));
@@ -108,7 +107,7 @@ public class JwtTest {
                 .build()
                 .createToken(jwtProperties);
         // when
-        Long userIdByToken = tokenProvider.getUserIdFromToken(token);
+        Long userIdByToken = tokenProvider.getUserIdLongToken(token);
                 // 복호화 시키는 부분은 getUserIdFromToken 메소드 안에있는 getClaims 메소드가 복호화 진행
 
         // then
