@@ -3,10 +3,7 @@ package kdt.hackathon.practicesecurity.entity;
 import com.github.f4b6a3.ulid.Ulid; // ULID 사용
 import jakarta.persistence.*;
 import kdt.hackathon.practicesecurity.authority.Role;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,6 +21,8 @@ import java.util.List;
 
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Getter
 @Entity
 public class User implements UserDetails {
@@ -78,60 +77,49 @@ public class User implements UserDetails {
     @Column(name = "profile_url")
     private String profileUrl;
 
-    @Builder
-    public User(String email,
-                String nickname)
-    {
-        this.email = email;
-        this.nickname = nickname;
-    }
 
-    @Builder // 닉네임 추가한 생성자 버전 2 추가
-    public User(String phoneNumber,
-                String password,
-                String birthDate,
-                String name,
-                Role role,
-                String nickname
-    )
-    {
-        this.id = Ulid.fast().toString();
-        // 각 User 객체가 생성될 때마다 고유한 ULID가 기본키로 자동 생성
 
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.birthDate = birthDate;
-        this.name = name;
-        this.role = role;
-        this.nickname = nickname;
+//    @Builder
+//    public User(String email,
+//                String nickname)
+//    {
+//        this.email = email;
+//        this.nickname = nickname;
+//    }
 
-    }
-
-    @Builder // @Builder는 빌더 패턴을 적용해 객체 생성을 유연하게
-    public User(String phoneNumber,
-                String password,
-                String birthDate,
-                String name,
-                Role role
-          )
-    {
-        this.id = Ulid.fast().toString();
-        // 각 User 객체가 생성될 때마다 고유한 ULID가 기본키로 자동 생성
-
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.birthDate = birthDate;
-        this.name = name;
-        this.role = role;
-
-    }
+    //  빌더를 , 생성자를 개별 적으로 만드는게 아니라 어노테이션 붙이고 생성하는 대로 처리하도록
+//    @Builder // @Builder는 빌더 패턴을 적용해 객체 생성을 유연하게
+//    public User(String phoneNumber,
+//                String password,
+//                String birthDate,
+//                String name,
+//                Role role
+//          )
+//    {
+//        this.id = Ulid.fast().toString();
+//        // 각 User 객체가 생성될 때마다 고유한 ULID가 기본키로 자동 생성
+//
+//        this.phoneNumber = phoneNumber;
+//        this.password = password;
+//        this.birthDate = birthDate;
+//        this.name = name;
+//        this.role = role;
+//
+//    }
 
 //     사용자 정보를 조회하여, 유저 테이블에 사용자 정보가 있다면, 리소스 서버에서 제공해주는 이름을 업데이트(구글)
 //     없다면 유저 테이블에서 새 사용자를 생성해 데이터베이스에 저장
-    public User update(String name) {
-        this.name = name;
-        return this;
-    }
+
+//
+//    public User update(String name) {
+//        this.name = name;
+//        return this;
+//    }
+public User update(String name) {
+    this.name = name; // Update the user's name
+    this.updatedAt = LocalDateTime.now(); // Update the `updatedAt` timestamp
+    return this; // Return the updated user
+}
 
     @Override // 권한 반환
     public Collection<? extends GrantedAuthority> getAuthorities() { // 권한 지정 X, 권한 "반환"
