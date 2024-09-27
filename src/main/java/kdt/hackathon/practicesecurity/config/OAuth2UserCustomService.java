@@ -18,7 +18,7 @@ import java.util.Map;
 public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+   // private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Override
@@ -41,8 +41,8 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                         .nickname(name)
                         .phoneNumber(randomPhoneNumber)
                         .role(Role.ROLE_USER)
-                        //.password("123456")
-                        .password(bCryptPasswordEncoder.encode("123456")) // 암호화된 비밀번호 저장
+                        .password("123456")
+                       // .password(bCryptPasswordEncoder.encode("123456")) // 암호화된 비밀번호 저장
 
                         .build());
 
