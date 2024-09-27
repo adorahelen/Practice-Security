@@ -13,7 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-public class TokenConfig extends OncePerRequestFilter {
+public class TokenAuthenFilterConfig extends OncePerRequestFilter {
     // 흐름
     // 1. 요청 -> [토큰 필터] if 유효한 토큰 -> 2. 인증 정보 저장[컨텍스트 홀더] -> 3. 로직 실행(서비스 단)
     //       응답  <-

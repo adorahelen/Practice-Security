@@ -47,6 +47,8 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                         .email(email)
                         .nickname(name)
                         .build());
+
+        return userRepository.save(user);
         // 이 코드는 그러면, 디비에 사용자 이름이 있으면 업데이트(뭐를?)
         // 없으면 이메일과 이름만을(닉네임)을 가지고 회원을 생성한 다음 디비에 저장한다.
 
@@ -55,6 +57,6 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
         // 1. 회원가입을 통해 모든 정보를 가지고 있는 회원
         // 2. 구글 혹은 카카오에서 보내주는 정보만 가지고 있는 회원
         // => 추후 다른게 정상적으로 진행된다면, 구글이나 카카오에서 제공해주는 정보를 늘리고. 이 부분 빌더 패턴 수정하면 될듯
-        return userRepository.save(user);
+
     }
 }
