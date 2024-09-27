@@ -72,6 +72,9 @@
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/55e6b098-1123-42bf-8cc9-89076aafcda2">
 
 
+## 09/27
+- 순환참조
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/68d9b1f7-67f5-457d-acbb-d5001be632f8">
 
 
 
