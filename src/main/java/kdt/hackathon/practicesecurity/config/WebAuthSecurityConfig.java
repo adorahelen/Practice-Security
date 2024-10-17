@@ -33,40 +33,39 @@ public class WebAuthSecurityConfig extends DefaultOAuth2UserService {
                 .requestMatchers("/img/**", "/css/**", "/js/**", "/fonts/**", "/images/**", "/webjars/**");
     }
 
-    @Bean // 토큰 방식으로 로그인 하기에, 세션 비활성화 설정 ( 폼 로그인도 )
+    @Bean // Token-based authentication, disable session management (also for form login)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .httpBasic().disable()
-                .formLogin().disable()
-                .logout().disable();
-
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // 커스텀 토큰 필터 추가
-        http.addFilterBefore(
-                tokenAuthenticationFilter(),
-                UsernamePasswordAuthenticationFilter.class);
-
-        // 토큰 재발급 URL 은 인증 없이 접근 가능하도록 설정, 나머지 API URL 은 인증 필요
-        http.authorizeRequests()
-                .requestMatchers("/api/token").permitAll()
-                .requestMatchers("/api/**").authenticated()
-                .anyRequest().permitAll();
-
-        // OAuth2 로그인 설정
-        http.oauth2Login(oauth2 -> oauth2
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/service").authenticated()
+                        .requestMatchers("/api/token").permitAll() // Token reissue URL accessible without authentication
+                        .requestMatchers("/api/**").authenticated() // All other API URLs require authentication
+                        .anyRequest().permitAll() // Permit all other requests
+                )
+                .formLogin()
                 .loginPage("/login")
-                .authorizationEndpoint(authorization -> authorization
-                        .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
-                .successHandler(oAuth2SuccessHandler())
-                .userInfoEndpoint(userInfo -> userInfo
-                        .userService(oAuth2UserCustomService))); // OAuth2UserCustomService 통합된 서비스 사용
-
-        http.logout().logoutSuccessUrl("/login");
-
-        // 예외 핸들링 처리
-        http.exceptionHandling()
+                .failureUrl("/login-error")
+                .defaultSuccessUrl("/service")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/login")
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Custom token filter
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .authorizationEndpoint(authorization -> authorization
+                                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
+                        .successHandler(oAuth2SuccessHandler())
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserCustomService))) // OAuth2UserCustomService for user info
+                .exceptionHandling()
                 .defaultAuthenticationEntryPointFor(
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                         new AntPathRequestMatcher("/api/**"));
@@ -74,7 +73,7 @@ public class WebAuthSecurityConfig extends DefaultOAuth2UserService {
         return http.build();
     }
 
-    @Bean
+    @Bean // 추후 등록 오쓰 2
     public OAuth2SuccessHandler oAuth2SuccessHandler() {
         return new OAuth2SuccessHandler(
                 tokenProvider,
@@ -89,7 +88,7 @@ public class WebAuthSecurityConfig extends DefaultOAuth2UserService {
         return new TokenAuthenFilterConfig(tokenProvider);
     }
 
-    @Bean
+    @Bean // 추후 등록 오쓰!
     public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
         return new OAuth2AuthorizationRequestBasedOnCookieRepository();
     }

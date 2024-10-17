@@ -35,6 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestBasedOnCookieRepository;
     private final UserRepository userRepository;
 
+    // 로그인(구글 오쓰) 성공적으로 이루어졌을 떄 어떻게 할껀지
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -46,6 +47,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // logic 리프레쉬 토큰 생성 -> 저장 -> 쿠키에 저장
         String refreshToken = tokenProvider.generateToken(user.get(), REFRESH_TOKEN_DURATION);
     }
+
 
 
     // 1. 생성된 리프레쉬 토큰을 전달받아 데이터베이스에 저장

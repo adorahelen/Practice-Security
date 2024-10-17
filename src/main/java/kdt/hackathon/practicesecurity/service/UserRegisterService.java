@@ -39,6 +39,8 @@ public class UserRegisterService {
 
 
         User user = User.builder()
+
+
                 .email(dto.getEmail()) // Email이 필수는 아니지만, DTO에 포함되면 저장, null 이 들어가겠지>?
                 .phoneNumber(dto.getPhoneNumber())
                 .birthDate(dto.getBirthDate())
